@@ -31,6 +31,7 @@ Sign in from the header to open **Club administration**. After the first admin i
 
 ## Manage the site
 
+- **Homepage** edits the headline, opening paragraph, and footer email address. Select words and choose **Toggle highlight** to give them the gold italic style, or put asterisks around them like `*story.*`. Use a new line to break the headline. Leave the club email blank to hide it from the public footer.
 - **Mission** updates the draft statement on the homepage.
 - **Meetings** posts or edits meeting dates, times, and locations. The public schedule shows upcoming meetings in Eastern time.
 - **Resources** accepts PDF or PPTX slides and MP4 or WebM videos up to 100 MB each. For public resources, you can also post an HTTPS link, such as a link to a hosted video. To protect material with a club login, upload the file and leave **Require a club sign-in** checked.
@@ -50,7 +51,13 @@ cd /opt/genealogy
 ```
 
 1. Check that port 5186 is free with `sudo ss -ltn 'sport = :5186'`. If it is in use, set a free port in `.env` and use the same value in the Nginx file.
-2. Copy `.env.example` to `.env` and restrict access to it with `chmod 600 .env`. Add your public domain to `CLUB_HOSTS`, separated from the loopback names by semicolons. For the initial deployment, set `BOOTSTRAP_ADMIN_EMAIL` and `BOOTSTRAP_ADMIN_PASSWORD`. Single quotes preserve literal dollar signs in Compose's .env syntax.
+2. Copy `.env.example` to `.env` and restrict access to it with `chmod 600 .env`. Add your public hostname to `CLUB_HOSTS`, separated from the loopback names by semicolons.
+
+   ```dotenv
+   CLUB_HOSTS='localhost;127.0.0.1;genealogy.example.com'
+   ```
+
+   Replace `genealogy.example.com` with your hostname. Enter just the hostname, without `https://` or a trailing slash. For the initial deployment, set `BOOTSTRAP_ADMIN_EMAIL` and `BOOTSTRAP_ADMIN_PASSWORD`. Single quotes preserve literal dollar signs in Compose's .env syntax.
 3. Run the following commands. Compose binds the application to the server’s loopback interface.
 
    ```bash

@@ -47,6 +47,8 @@ public sealed record Meeting(long Id, string Title, string StartsAt, string? Loc
     public DateTime LocalTime => DateTime.ParseExact(StartsAt, ClubClock.LocalFormat, CultureInfo.InvariantCulture);
 }
 
+public sealed record HomepageContent(string Mission, string HeroHeadline, string HeroIntroduction, string? ClubEmail);
+
 public sealed record Resource(
     long Id, string Title, string Kind, string? Description, bool MembersOnly,
     string? ExternalUrl, string? StorageKey, string? OriginalName, string? ContentType, long Revision)
@@ -71,6 +73,10 @@ public sealed class ClubData(ClubStorage storage)
     public const string DraftMission =
         "We bring Colonial Heritage neighbors together to explore family history, share research skills, and preserve the stories of generations past. Whether you’re opening your first family record or tracing a line you’ve followed for years, there’s a place for you here.";
 
+    private const string DefaultHeroHeadline = "Every family\nhas a *story.*";
+    private const string DefaultHeroIntroduction =
+        "Discover yours with the Colonial Heritage Genealogy Club. Explore your roots and share what you find with neighbors who love family history.";
+
     private const string MeetingColumns = "Id, Title, StartsAt, Location, Description";
     private const string ResourceColumns =
         "Id, Title, Kind, Description, MembersOnly, ExternalUrl, StorageKey, OriginalName, ContentType, Revision";
@@ -89,7 +95,7 @@ public sealed class ClubData(ClubStorage storage)
         await connection.OpenAsync();
         using var transaction = connection.BeginTransaction(deferred: false);
         var version = await connection.ExecuteScalarAsync<int>("PRAGMA user_version;", transaction: transaction);
-        if (version > 1)
+        if (version > 3)
             throw new InvalidOperationException("This database was created by a newer version of the site.");
 
         if (version == 0)
@@ -134,13 +140,47 @@ public sealed class ClubData(ClubStorage storage)
                 """, new { Mission = DraftMission }, transaction);
         }
 
+        if (version < 2)
+        {
+            await connection.ExecuteAsync("""
+                ALTER TABLE ClubSettings ADD COLUMN HeroHeadline TEXT NOT NULL DEFAULT '';
+                ALTER TABLE ClubSettings ADD COLUMN HeroIntroduction TEXT NOT NULL DEFAULT '';
+                UPDATE ClubSettings SET HeroHeadline = @Headline, HeroIntroduction = @Introduction WHERE Id = 1;
+                PRAGMA user_version = 2;
+                """, new { Headline = DefaultHeroHeadline, Introduction = DefaultHeroIntroduction }, transaction);
+        }
+
+        if (version < 3)
+        {
+            await connection.ExecuteAsync("""
+                ALTER TABLE ClubSettings ADD COLUMN ClubEmail TEXT;
+                PRAGMA user_version = 3;
+                """, transaction: transaction);
+        }
+
         transaction.Commit();
     }
 
-    public async Task<string> GetMissionAsync()
+    public async Task<HomepageContent> GetHomepageAsync()
     {
         await using var connection = Connect();
-        return await connection.QuerySingleAsync<string>("SELECT Mission FROM ClubSettings WHERE Id = 1");
+        return await connection.QuerySingleAsync<HomepageContent>(
+            "SELECT Mission, HeroHeadline, HeroIntroduction, ClubEmail FROM ClubSettings WHERE Id = 1");
+    }
+
+    public async Task<string?> GetClubEmailAsync()
+    {
+        await using var connection = Connect();
+        return await connection.QuerySingleAsync<string?>("SELECT ClubEmail FROM ClubSettings WHERE Id = 1");
+    }
+
+    public async Task SaveHomepageAsync(string headline, string introduction, string? clubEmail)
+    {
+        await using var connection = Connect();
+        await connection.ExecuteAsync("""
+            UPDATE ClubSettings SET HeroHeadline = @Headline, HeroIntroduction = @Introduction, ClubEmail = @ClubEmail
+            WHERE Id = 1
+            """, new { Headline = headline, Introduction = introduction, ClubEmail = clubEmail });
     }
 
     public async Task SaveMissionAsync(string mission)

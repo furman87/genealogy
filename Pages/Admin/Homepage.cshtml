@@ -1,0 +1,35 @@
+@page "/admin/homepage"
+@model Genealogy.Pages.Admin.HomepageModel
+@{
+    ViewData["Title"] = "Edit homepage";
+}
+@if (Model.Status is not null)
+{
+    <p class="notice" role="status">@Model.Status</p>
+}
+<form method="post" class="editor-form panel">
+    <div asp-validation-summary="ModelOnly" class="validation"></div>
+    <div class="field">
+        <label asp-for="Input.Headline"></label>
+        <textarea asp-for="Input.Headline" rows="3" maxlength="@Genealogy.Pages.Admin.HomepageModel.HomepageInput.HeadlineMaxLength"
+                  aria-describedby="headline-help"></textarea>
+        <small id="headline-help">Put asterisks around words like <code>*story.*</code> for gold italics. Press Enter to start a new line.</small>
+        <button type="button" id="toggle-headline-highlight" class="button button-outline button-small" hidden>Toggle highlight</button>
+        <small id="highlight-status" role="status"></small>
+        <span asp-validation-for="Input.Headline" class="validation"></span>
+    </div>
+    <div class="field">
+        <label asp-for="Input.Introduction">Opening paragraph <span class="optional">Optional</span></label>
+        <textarea asp-for="Input.Introduction" rows="5" maxlength="@Genealogy.Pages.Admin.HomepageModel.HomepageInput.IntroductionMaxLength"></textarea>
+        <span asp-validation-for="Input.Introduction" class="validation"></span>
+    </div>
+    <div class="field">
+        <label asp-for="Input.ClubEmail">Club email address <span class="optional">Optional</span></label>
+        <input asp-for="Input.ClubEmail" maxlength="@Genealogy.Pages.Admin.HomepageModel.HomepageInput.ClubEmailMaxLength"
+               aria-describedby="club-email-help">
+        <small id="club-email-help">Appears in the public footer. Leave blank to hide the address.</small>
+        <span asp-validation-for="Input.ClubEmail" class="validation"></span>
+    </div>
+    <button class="button button-primary" type="submit">Save homepage</button>
+</form>
+<script src="~/js/homepage-editor.js" asp-append-version="true" defer></script>

@@ -145,7 +145,7 @@ h3 { font-size: 1.5rem; letter-spacing: -.025em; }
 .eyebrow .icon { width: 1rem; height: 1rem; }
 .hero-eyebrow { color: #e6c889; }
 .hero-eyebrow span { display: block; width: 1.85rem; height: 1px; background: currentColor; }
-.hero h1 { margin: 1.27rem 0 1.45rem; font-size: clamp(3.55rem, 6vw, 6.3rem); line-height: .99; }
+.hero h1 { margin: 1.27rem 0 1.45rem; font-size: clamp(3.55rem, 6vw, 6.3rem); line-height: .99; white-space: pre-line; }
 .hero h1 em { color: var(--gold); font-weight: 400; }
 .hero-intro { max-width: 27rem; color: #e3e6e7; font-size: clamp(1rem, 1.27vw, 1.13rem); line-height: 1.72; }
 .hero-actions { display: flex; flex-wrap: wrap; gap: .75rem; margin-top: 1.9rem; }
@@ -248,6 +248,7 @@ h3 { font-size: 1.5rem; letter-spacing: -.025em; }
 .site-footer .brand-name > span { font-size: 1.12rem; }
 .footer-place { display: flex; align-items: center; gap: .45rem; color: #d9dfe1; font-size: .88rem; }
 .footer-place .icon { width: 1rem; height: 1rem; color: var(--gold); }
+.footer-links { display: grid; gap: .35rem; min-width: 0; overflow-wrap: anywhere; }
 .footer-link { color: #dfd1b7; font-size: .88rem; text-underline-offset: .23em; }
 .footer-link:hover { color: white; }
 
@@ -317,6 +318,7 @@ h3 { font-size: 1.5rem; letter-spacing: -.025em; }
 .auth-card .auth-help { margin: 1.25rem 0 0; border-top: 1px solid var(--line); padding-top: .8rem; font-size: .9rem; }
 .editor-form { display: grid; gap: 1rem; max-width: 43rem; }
 .editor-form .button { justify-self: start; }
+.field .button[hidden] { display: none; }
 .auth-card .editor-form .button { justify-self: stretch; }
 .field { display: grid; gap: .34rem; }
 .field label, .check-field { color: var(--navy); font-weight: 650; }

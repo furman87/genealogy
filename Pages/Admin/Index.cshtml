@@ -3,9 +3,13 @@
     ViewData["Title"] = "Club administration";
 }
 <div class="admin-grid">
+    <a class="admin-card" asp-page="/Admin/Homepage">
+        <span class="icon-tile"><partial name="_Icon" model='"book"' /></span>
+        <div><h2>Homepage</h2><p>Edit the headline, opening paragraph, and club email.</p></div>
+    </a>
     <a class="admin-card" asp-page="/Admin/Mission">
         <span class="icon-tile"><partial name="_Icon" model='"book"' /></span>
-        <div><h2>Mission statement</h2><p>Edit the introduction on the homepage.</p></div>
+        <div><h2>Mission statement</h2><p>Edit the club’s mission on the homepage.</p></div>
     </a>
     <a class="admin-card" asp-page="/Admin/Meeting">
         <span class="icon-tile"><partial name="_Icon" model='"calendar"' /></span>

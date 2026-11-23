@@ -4,8 +4,11 @@
     <div class="hero-copy">
         <div class="hero-inner">
             <p class="eyebrow hero-eyebrow"><span></span> Williamsburg, Virginia</p>
-            <h1 id="hero-title">Every family<br>has a <em>story.</em></h1>
-            <p class="hero-intro">Discover yours with the Colonial Heritage Genealogy Club. Explore your roots and share what you find with neighbors who love family history.</p>
+            <h1 id="hero-title">@Model.HeroHeadline</h1>
+            @if (!string.IsNullOrEmpty(Model.HeroIntroduction))
+            {
+                <p class="hero-intro preserve">@Model.HeroIntroduction</p>
+            }
             <div class="hero-actions">
                 <a class="button button-gold" asp-page="/Meetings">
                     <partial name="_Icon" model='"calendar"' /> Upcoming meetings

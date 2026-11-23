@@ -1,8 +1,10 @@
+@inject ClubData Club
 @{
     var page = ViewContext.RouteData.Values["page"] as string;
     var isAdmin = User.IsInRole(AccountRoles.Admin);
     var signedIn = User.Identity?.IsAuthenticated == true;
     var title = ViewData["Title"] is string current ? $"{current} | Colonial Heritage Genealogy Club" : "Colonial Heritage Genealogy Club";
+    var clubEmail = page == "/Error" ? null : await Club.GetClubEmailAsync();
 }
 <!doctype html>
 <html lang="en">
@@ -56,7 +58,13 @@
                 <partial name="_Logo" />
             </a>
             <span class="footer-place"><partial name="_Icon" model='"pin"' /> Williamsburg, Virginia</span>
-            <a class="footer-link" href="https://www.colonialheritageclub.com/">Colonial Heritage community</a>
+            <div class="footer-links">
+                @if (!string.IsNullOrEmpty(clubEmail))
+                {
+                    <a class="footer-link" href="mailto:@(Uri.EscapeDataString(clubEmail).Replace("%40", "@"))">@clubEmail</a>
+                }
+                <a class="footer-link" href="https://www.colonialheritageclub.com/">Colonial Heritage community</a>
+            </div>
         </div>
     </footer>
     @await RenderSectionAsync("Scripts", required: false)

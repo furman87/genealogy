@@ -13,7 +13,7 @@ public sealed class MissionModel(ClubData data) : PageModel
     [TempData]
     public string? Status { get; set; }
 
-    public async Task OnGetAsync() => Mission = await data.GetMissionAsync();
+    public async Task OnGetAsync() => Mission = (await data.GetHomepageAsync()).Mission;
 
     public async Task<IActionResult> OnPostAsync()
     {
