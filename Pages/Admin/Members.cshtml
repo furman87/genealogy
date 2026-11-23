@@ -1,0 +1,73 @@
+@page "/admin/members/{id:long?}"
+@model Genealogy.Pages.Admin.MembersModel
+@{
+    ViewData["Title"] = Model.Member is null ? "Manage members" : "Edit member";
+}
+@if (Model.Status is not null)
+{
+    <p class="notice" role="status">@Model.Status</p>
+}
+<div class="admin-columns">
+    <section class="panel">
+        @if (Model.Member is { } member)
+        {
+            <h2>@member.Email</h2>
+            <p>Access is @(member.IsActive ? "active." : "disabled.")</p>
+        }
+        else
+        {
+            <h2>Create a member account</h2>
+            <p>Share the sign-in details privately with the member. They can change their password after signing in.</p>
+        }
+        <form method="post" class="editor-form">
+            <div asp-validation-summary="ModelOnly" class="validation"></div>
+            @if (Model.Member is null)
+            {
+                <div class="field">
+                    <label asp-for="Input.Email">Email address</label>
+                    <input asp-for="Input.Email" inputmode="email" autocomplete="off">
+                    <span asp-validation-for="Input.Email" class="validation"></span>
+                </div>
+            }
+            <div class="field">
+                <label asp-for="Input.Password">@(Model.Member is null ? "Temporary password" : "New temporary password")</label>
+                <input asp-for="Input.Password" autocomplete="new-password" aria-describedby="member-password-help">
+                <small id="member-password-help">Use at least 12 characters.</small>
+                <span asp-validation-for="Input.Password" class="validation"></span>
+            </div>
+            <button class="button button-primary" type="submit">@(Model.Member is null ? "Create account" : "Reset password")</button>
+        </form>
+        @if (Model.Member is { } account)
+        {
+            <details class="delete-panel">
+                <summary>@(account.IsActive ? "Revoke access" : "Restore access")</summary>
+                <p>@(account.IsActive ? "The member will be signed out and blocked from signing in again." : "The member can sign in again with their current password.")</p>
+                <form method="post" asp-page-handler="SetStatus" asp-route-id="@account.Id" asp-route-active="@(!account.IsActive)">
+                    <button type="submit" class="button @(account.IsActive ? "button-danger" : "button-primary")">@(account.IsActive ? "Revoke access" : "Restore access")</button>
+                </form>
+            </details>
+        }
+    </section>
+    @if (Model.Member is null)
+    {
+        <section class="panel">
+            <h2>Member accounts</h2>
+            @if (Model.Members.Count == 0)
+            {
+                <p>No member accounts have been created.</p>
+            }
+            else
+            {
+                <ul class="manage-list">
+                    @foreach (var listedMember in Model.Members)
+                    {
+                        <li>
+                            <div><strong>@listedMember.Email</strong><small>@(listedMember.IsActive ? "Active" : "Disabled")</small></div>
+                            <a class="text-link" asp-route-id="@listedMember.Id" aria-label="Edit @listedMember.Email">Edit</a>
+                        </li>
+                    }
+                </ul>
+            }
+        </section>
+    }
+</div>

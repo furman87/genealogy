@@ -1,0 +1,53 @@
+@page
+@model IndexModel
+<section class="hero" aria-labelledby="hero-title">
+    <div class="hero-copy">
+        <div class="hero-inner">
+            <p class="eyebrow hero-eyebrow"><span></span> Williamsburg, Virginia</p>
+            <h1 id="hero-title">Every family<br>has a <em>story.</em></h1>
+            <p class="hero-intro">Discover yours with the Colonial Heritage Genealogy Club. Explore your roots and share what you find with neighbors who love family history.</p>
+            <div class="hero-actions">
+                <a class="button button-gold" asp-page="/Meetings">
+                    <partial name="_Icon" model='"calendar"' /> Upcoming meetings
+                </a>
+                <a class="button button-light" asp-page="/Library">Explore the library</a>
+            </div>
+        </div>
+    </div>
+    <div class="hero-image">
+        <img src="~/images/family-archive.jpg" asp-append-version="true" width="1536" height="1024"
+             alt="A hand-drawn family tree in an open ledger beside old portraits and a brass magnifying glass" fetchpriority="high">
+    </div>
+</section>
+<div class="shell home-content">
+    <section class="mission" aria-labelledby="mission-title">
+        <p class="eyebrow"><partial name="_Icon" model='"book"' /> About the club</p>
+        <h2 id="mission-title">Our mission</h2>
+        <p class="mission-copy preserve">@Model.Mission</p>
+    </section>
+    <section class="home-meetings" aria-labelledby="meetings-title">
+        <div class="section-heading">
+            <h2 id="meetings-title">Upcoming meetings</h2>
+            <a class="text-link" asp-page="/Meetings">View meeting schedule</a>
+        </div>
+        <partial name="_MeetingList" model="Model.Meetings" />
+    </section>
+</div>
+<section class="home-library" aria-labelledby="library-title">
+    <div class="shell home-library-inner">
+        <div>
+            <h2 id="library-title">Resource library</h2>
+            <p>Revisit meeting presentations and watch recordings at your own pace.</p>
+        </div>
+        <div class="library-shortcuts">
+            <a class="library-shortcut" asp-page="/Library" asp-route-kind="Slides">
+                <span class="icon-tile"><partial name="_Icon" model='"slides"' /></span>
+                <span>Meeting slides</span>
+            </a>
+            <a class="library-shortcut" asp-page="/Library" asp-route-kind="Video">
+                <span class="icon-tile"><partial name="_Icon" model='"video"' /></span>
+                <span>Video recordings</span>
+            </a>
+        </div>
+    </div>
+</section>

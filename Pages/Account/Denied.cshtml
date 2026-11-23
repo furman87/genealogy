@@ -1,0 +1,10 @@
+@page "/account/denied"
+@{
+    ViewData["Title"] = "Access restricted";
+    Response.StatusCode = 403;
+}
+<section class="shell page-body">
+    <h1>Access restricted</h1>
+    <p>Only the club administrator can open this page.</p>
+    <a class="text-link" asp-page="/Library">Back to the resource library</a>
+</section>

@@ -1,0 +1,87 @@
+# Build output
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Ll]ogs/
+[Tt]est[Rr]esult*/
+[Bb]uild/
+[Aa]rtifacts/
+[Dd]ist/
+[Pp]ublish/
+
+# .NET tooling and generated state
+.vs/
+.vscode/
+.idea/
+*.user
+*.userosscache
+*.suo
+*.rsuser
+*.sln.docstates
+*.pidb
+*.svclog
+*.cache
+*.nupkg
+*.snupkg
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+# Rider and ReSharper
+_ReSharper*/
+*.[Rr]e[Ss]harper
+*.DotSettings.user
+
+# NuGet packages and local tools
+packages/
+*.nuget.props
+*.nuget.targets
+.nuget/NuGet.Config
+
+# Environment files and secrets
+.env
+.env.*
+!.env.example
+appsettings.Local.json
+appsettings.Production.json
+secrets.json
+*.pfx
+*.p12
+*.pem
+*.key
+
+# Local databases and Docker runtime data
+*.db
+*.db-shm
+*.db-wal
+*.sqlite
+*.sqlite3
+docker-data/
+App_Data/
+
+# OS files
+.DS_Store
+Thumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Temporary files and coverage
+*.tmp
+*.temp
+*.bak
+*.swp
+*.swo
+*~
+coverage/
+coverage.xml
+TestResults/
+
+# JavaScript tooling, when present
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+.eslintcache
+
+# Keep source-controlled test fixtures, seed data, migrations, and .env.example.

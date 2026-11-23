@@ -1,0 +1,21 @@
+@{
+    Layout = "_Layout";
+    var page = ViewContext.RouteData.Values["page"] as string;
+}
+<section class="page-banner admin-banner">
+    <div class="shell">
+        <p class="eyebrow"><partial name="_Icon" model='"lock"' /> Administration</p>
+        <h1>@ViewData["Title"]</h1>
+    </div>
+</section>
+<div class="shell page-body admin-body">
+    <nav class="filter-links admin-nav" aria-label="Administration">
+        <a asp-page="/Admin/Index" aria-current="@(page == "/Admin/Index" ? "page" : null)">Overview</a>
+        <a asp-page="/Admin/Mission" aria-current="@(page == "/Admin/Mission" ? "page" : null)">Mission</a>
+        <a asp-page="/Admin/Meeting" asp-route-id="" aria-current="@(page == "/Admin/Meeting" ? "page" : null)">Meetings</a>
+        <a asp-page="/Admin/Material" asp-route-id="" aria-current="@(page == "/Admin/Material" ? "page" : null)">Resources</a>
+        <a asp-page="/Admin/Members" asp-route-id="" aria-current="@(page == "/Admin/Members" ? "page" : null)">Members</a>
+        <a asp-page="/Account/Password">Change password</a>
+    </nav>
+    @RenderBody()
+</div>

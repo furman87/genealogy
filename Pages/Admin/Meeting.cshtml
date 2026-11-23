@@ -1,0 +1,71 @@
+@page "/admin/meetings/{id:long?}"
+@model Genealogy.Pages.Admin.MeetingModel
+@{
+    ViewData["Title"] = Model.MeetingId.HasValue ? "Edit meeting" : "Manage meetings";
+}
+@if (Model.Status is not null)
+{
+    <p class="notice" role="status">@Model.Status</p>
+}
+<div class="admin-columns">
+    <section class="panel">
+        <h2>@(Model.MeetingId.HasValue ? "Meeting details" : "Post a meeting")</h2>
+        <form method="post" class="editor-form">
+            <div asp-validation-summary="ModelOnly" class="validation"></div>
+            <div class="field">
+                <label asp-for="Input.Title"></label>
+                <input asp-for="Input.Title" maxlength="160">
+                <span asp-validation-for="Input.Title" class="validation"></span>
+            </div>
+            <div class="field">
+                <label asp-for="Input.StartsAt">Date and time</label>
+                <input asp-for="Input.StartsAt" type="datetime-local" aria-describedby="time-help">
+                <small id="time-help">@Model.TimeZoneName</small>
+                <span asp-validation-for="Input.StartsAt" class="validation"></span>
+            </div>
+            <div class="field">
+                <label asp-for="Input.Location">Location <span class="optional">Optional</span></label>
+                <input asp-for="Input.Location" maxlength="160">
+                <span asp-validation-for="Input.Location" class="validation"></span>
+            </div>
+            <div class="field">
+                <label asp-for="Input.Description">Description <span class="optional">Optional</span></label>
+                <textarea asp-for="Input.Description" rows="4" maxlength="2500"></textarea>
+                <span asp-validation-for="Input.Description" class="validation"></span>
+            </div>
+            <button class="button button-primary" type="submit">@(Model.MeetingId.HasValue ? "Save meeting" : "Post meeting")</button>
+        </form>
+        @if (Model.MeetingId is long meetingId)
+        {
+            <details class="delete-panel">
+                <summary>Remove meeting</summary>
+                <p>This removes the meeting from the public schedule.</p>
+                <form method="post" asp-page-handler="Delete" asp-route-id="@meetingId">
+                    <button type="submit" class="button button-danger">Remove meeting</button>
+                </form>
+            </details>
+        }
+    </section>
+    @if (Model.MeetingId is null)
+    {
+        <section class="panel">
+            <h2>Posted meetings</h2>
+            @if (Model.Meetings.Count == 0)
+            {
+                <p>No meetings have been posted.</p>
+            }
+            else
+            {
+                <ul class="manage-list">
+                    @foreach (var meeting in Model.Meetings)
+                    {
+                        <li>
+                            <div><strong>@meeting.Title</strong><small>@meeting.LocalTime.ToString("MMM d, yyyy 'at' h:mm tt")</small></div>
+                            <a class="text-link" asp-route-id="@meeting.Id" aria-label="Edit @meeting.Title">Edit</a>
+                        </li>
+                    }
+                </ul>
+            }
+        </section>
+    }
+</div>

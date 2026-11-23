@@ -1,0 +1,89 @@
+@page "/admin/resources/{id:long?}"
+@model Genealogy.Pages.Admin.MaterialModel
+@{
+    ViewData["Title"] = Model.ResourceId.HasValue ? "Edit resource" : "Manage resources";
+}
+@if (Model.Status is not null)
+{
+    <p class="notice" role="status">@Model.Status</p>
+}
+<div class="admin-columns">
+    <section class="panel">
+        <h2>@(Model.ResourceId.HasValue ? "Resource details" : "Post a resource")</h2>
+        <form method="post" enctype="multipart/form-data" class="editor-form">
+            <input type="hidden" asp-for="Input.Revision">
+            <div asp-validation-summary="ModelOnly" class="validation"></div>
+            <div class="field">
+                <label asp-for="Input.Title"></label>
+                <input asp-for="Input.Title" maxlength="160">
+                <span asp-validation-for="Input.Title" class="validation"></span>
+            </div>
+            <div class="field">
+                <label asp-for="Input.Kind">Resource type</label>
+                <select asp-for="Input.Kind">
+                    <option value="Slides">Meeting slides</option>
+                    <option value="Video">Video recording</option>
+                </select>
+                <span asp-validation-for="Input.Kind" class="validation"></span>
+            </div>
+            <div class="field">
+                <label asp-for="Input.Description">Description <span class="optional">Optional</span></label>
+                <textarea asp-for="Input.Description" maxlength="2500" rows="3"></textarea>
+                <span asp-validation-for="Input.Description" class="validation"></span>
+            </div>
+            <div class="field">
+                <label asp-for="Input.Upload">Upload a file</label>
+                <input asp-for="Input.Upload" type="file" accept=".pdf,.pptx,.mp4,.webm" aria-describedby="file-help">
+                @if (Model.CurrentFile is not null)
+                {
+                    <small>Current file: @Model.CurrentFile</small>
+                }
+                <small id="file-help">PDF, PowerPoint (.pptx), MP4 or WebM. Maximum 100 MB.</small>
+                <span asp-validation-for="Input.Upload" class="validation"></span>
+            </div>
+            <div class="field">
+                <label asp-for="Input.PublicLink">Or add a public link</label>
+                <input asp-for="Input.PublicLink" type="url" maxlength="1500" placeholder="https://" aria-describedby="link-help">
+                <small id="link-help">Use an HTTPS link for materials anyone can access.</small>
+                <span asp-validation-for="Input.PublicLink" class="validation"></span>
+            </div>
+            <label class="check-field"><input asp-for="Input.MembersOnly"> Require a club sign-in</label>
+            <button class="button button-primary" type="submit">@(Model.ResourceId.HasValue ? "Save resource" : "Post resource")</button>
+        </form>
+        @if (Model.ResourceId is long resourceId)
+        {
+            <details class="delete-panel">
+                <summary>Remove resource</summary>
+                <p>This removes the resource and any associated upload.</p>
+                <form method="post" asp-page-handler="Delete" asp-route-id="@resourceId">
+                    <button type="submit" class="button button-danger">Remove resource</button>
+                </form>
+            </details>
+        }
+    </section>
+    @if (Model.ResourceId is null)
+    {
+        <section class="panel">
+            <h2>Posted resources</h2>
+            @if (Model.Resources.Count == 0)
+            {
+                <p>No resources have been posted.</p>
+            }
+            else
+            {
+                <ul class="manage-list">
+                    @foreach (var resource in Model.Resources)
+                    {
+                        <li>
+                            <div>
+                                <a class="text-link" asp-page="/Resource" asp-route-id="@resource.Id">@resource.Title</a>
+                                <small>@resource.Kind · @(resource.MembersOnly ? "Members only" : "Public")</small>
+                            </div>
+                            <a class="text-link" asp-route-id="@resource.Id" aria-label="Edit @resource.Title">Edit</a>
+                        </li>
+                    }
+                </ul>
+            }
+        </section>
+    }
+</div>

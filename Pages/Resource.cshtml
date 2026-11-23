@@ -1,0 +1,40 @@
+@page "/library/{id:long}"
+@model ResourceModel
+@{
+    ViewData["Title"] = Model.Item.Title;
+    var item = Model.Item;
+}
+<section class="page-banner">
+    <div class="shell">
+        <a class="breadcrumb" asp-page="/Library">Resource library</a>
+        <h1>@item.Title</h1>
+        @if (item.MembersOnly)
+        {
+            <p class="member-note-inline"><partial name="_Icon" model='"lock"' /> Members only</p>
+        }
+    </div>
+</section>
+<div class="shell page-body resource-detail">
+    @if (!string.IsNullOrWhiteSpace(item.Description))
+    {
+        <p class="preserve lead">@item.Description</p>
+    }
+    @if (item.ExternalUrl is not null)
+    {
+        <a class="button button-primary" href="@item.ExternalUrl">@(item.Kind == "Video" ? "Watch video" : "Open slides")</a>
+    }
+    else
+    {
+        @if (item.Kind == "Video")
+        {
+            <video class="resource-video" controls playsinline preload="metadata"
+                   src="@Url.Page("/Resource", "File", new { id = item.Id })">
+                Download the video to watch it on your device.
+            </video>
+        }
+        <a class="button button-primary" asp-page-handler="File" asp-route-id="@item.Id" asp-route-download="true">
+            <partial name="_Icon" model='"download"' />
+            @(item.Kind == "Video" ? "Download video" : "Download slides")
+        </a>
+    }
+</div>

@@ -1,0 +1,43 @@
+@model IReadOnlyList<Meeting>
+@inject ClubClock Clock
+@if (Model.Count == 0)
+{
+    <div class="meeting-empty">
+        <span class="icon-tile"><partial name="_Icon" model='"calendar"' /></span>
+        <div>
+            <strong>No meetings scheduled yet</strong>
+            <p>Check back for the next meeting date.</p>
+        </div>
+    </div>
+}
+else
+{
+    <ol class="meeting-list">
+        @foreach (var meeting in Model)
+        {
+            var time = meeting.LocalTime;
+            <li class="meeting-row">
+                <div class="date-card" aria-hidden="true">
+                    <span>@time.ToString("MMM")</span>
+                    <strong>@time.Day</strong>
+                </div>
+                <div>
+                    <h3>@meeting.Title</h3>
+                    <p class="meeting-meta">
+                        <span><partial name="_Icon" model='"clock"' />
+                            <time datetime="@meeting.StartsAt">@time.ToString("dddd, MMM d, yyyy 'at' h:mm tt") @Clock.ZoneLabel(time)</time>
+                        </span>
+                        @if (!string.IsNullOrWhiteSpace(meeting.Location))
+                        {
+                            <span><partial name="_Icon" model='"pin"' /> @meeting.Location</span>
+                        }
+                    </p>
+                    @if (!string.IsNullOrWhiteSpace(meeting.Description))
+                    {
+                        <p class="preserve">@meeting.Description</p>
+                    }
+                </div>
+            </li>
+        }
+    </ol>
+}

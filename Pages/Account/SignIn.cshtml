@@ -1,0 +1,28 @@
+@page "/sign-in"
+@model Genealogy.Pages.Account.SignInModel
+@{
+    ViewData["Title"] = "Sign in";
+}
+<section class="shell auth-shell">
+    <div class="auth-card">
+        <span class="icon-tile"><partial name="_Icon" model='"lock"' /></span>
+        <h1>Sign in</h1>
+        <p>Use your club account to access members-only materials or manage the site.</p>
+        <form method="post" class="editor-form">
+            <input asp-for="ReturnUrl" type="hidden">
+            <div asp-validation-summary="ModelOnly" class="validation"></div>
+            <div class="field">
+                <label asp-for="Input.Email">Email address</label>
+                <input asp-for="Input.Email" autocomplete="username" inputmode="email">
+                <span asp-validation-for="Input.Email" class="validation"></span>
+            </div>
+            <div class="field">
+                <label asp-for="Input.Password"></label>
+                <input asp-for="Input.Password" autocomplete="current-password">
+                <span asp-validation-for="Input.Password" class="validation"></span>
+            </div>
+            <button class="button button-primary" type="submit">Sign in</button>
+        </form>
+        <p class="auth-help">For an account or password reset, contact the club administrator.</p>
+    </div>
+</section>

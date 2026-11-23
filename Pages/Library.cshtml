@@ -1,0 +1,60 @@
+@page "/library"
+@model LibraryModel
+@{
+    ViewData["Title"] = "Resource Library";
+}
+<section class="page-banner">
+    <div class="shell">
+        <p class="eyebrow"><partial name="_Icon" model='"book"' /> Club materials</p>
+        <h1>Resource library</h1>
+        <p>Find presentation slides and recordings from club meetings.</p>
+    </div>
+</section>
+<div class="shell page-body">
+    <nav class="filter-links" aria-label="Resource type">
+        <a asp-page="/Library" aria-current="@(Model.Kind is null ? "page" : null)">All resources</a>
+        <a asp-page="/Library" asp-route-kind="Slides" aria-current="@(Model.Kind == "Slides" ? "page" : null)">Slides</a>
+        <a asp-page="/Library" asp-route-kind="Video" aria-current="@(Model.Kind == "Video" ? "page" : null)">Videos</a>
+    </nav>
+    @if (Model.Resources.Count == 0)
+    {
+        <div class="meeting-empty">
+            <span class="icon-tile"><partial name="_Icon" model='"book"' /></span>
+            <div>
+                <strong>@(Model.Kind switch { "Slides" => "No slides available yet", "Video" => "No videos available yet", _ => "No resources available yet" })</strong>
+                <p>New materials will appear here when they’re posted.</p>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="resource-grid">
+            @foreach (var resource in Model.Resources)
+            {
+                <article class="resource-card">
+                    <span class="icon-tile"><partial name="_Icon" model='@(resource.Kind == "Slides" ? "slides" : "video")' /></span>
+                    <p class="resource-meta">
+                        @(resource.Kind == "Slides" ? "Meeting slides" : "Video recording")
+                        @if (resource.MembersOnly)
+                        {
+                            <span class="members-label"><partial name="_Icon" model='"lock"' /> Members only</span>
+                        }
+                    </p>
+                    <h2><a asp-page="/Resource" asp-route-id="@resource.Id">@resource.Title</a></h2>
+                    @if (!string.IsNullOrWhiteSpace(resource.Description))
+                    {
+                        <p class="preserve">@resource.Description</p>
+                    }
+                </article>
+            }
+        </div>
+    }
+    @if (User.Identity?.IsAuthenticated != true)
+    {
+        <aside class="member-note">
+            <partial name="_Icon" model='"lock"' />
+            <span>Club members can sign in to see members-only materials.</span>
+            <a class="text-link" asp-page="/Account/SignIn" asp-route-returnUrl="@(Request.Path + Request.QueryString)">Sign in</a>
+        </aside>
+    }
+</div>

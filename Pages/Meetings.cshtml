@@ -1,0 +1,15 @@
+@page "/meetings"
+@model MeetingsModel
+@{
+    ViewData["Title"] = "Meetings";
+}
+<section class="page-banner">
+    <div class="shell">
+        <p class="eyebrow"><partial name="_Icon" model='"calendar"' /> Club schedule</p>
+        <h1>Upcoming meetings</h1>
+        <p>Get together with neighbors to share discoveries and learn new ways to research your family history.</p>
+    </div>
+</section>
+<section class="shell page-body" aria-label="Meeting dates">
+    <partial name="_MeetingList" model="Model.Meetings" />
+</section>

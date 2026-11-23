@@ -1,0 +1,64 @@
+@{
+    var page = ViewContext.RouteData.Values["page"] as string;
+    var isAdmin = User.IsInRole(AccountRoles.Admin);
+    var signedIn = User.Identity?.IsAuthenticated == true;
+    var title = ViewData["Title"] is string current ? $"{current} | Colonial Heritage Genealogy Club" : "Colonial Heritage Genealogy Club";
+}
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Explore your family history with the Colonial Heritage Genealogy Club in Williamsburg, Virginia. Find upcoming meetings, slides, and recordings.">
+    <title>@title</title>
+    <link rel="icon" type="image/svg+xml" href="~/images/tree-mark.svg" asp-append-version="true">
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true">
+</head>
+<body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <header class="site-header">
+        <div class="shell header-inner">
+            <a class="brand" asp-page="/Index" aria-label="Colonial Heritage Genealogy Club home">
+                <partial name="_Logo" />
+            </a>
+            <nav class="primary-nav" aria-label="Main">
+                <a asp-page="/Index" aria-current="@(page == "/Index" ? "page" : null)">Home</a>
+                <a asp-page="/Meetings" aria-current="@(page == "/Meetings" ? "page" : null)">Meetings</a>
+                <a asp-page="/Library" aria-current="@(page is "/Library" or "/Resource" ? "page" : null)">Resource Library</a>
+            </nav>
+            <div class="header-account">
+                @if (signedIn)
+                {
+                    <a class="button button-outline button-small" asp-page="@(isAdmin ? "/Admin/Index" : "/Account/Password")">
+                        <partial name="_Icon" model='"account"' />
+                        @(isAdmin ? "Admin" : "Account")
+                    </a>
+                    <form method="post" asp-page="/Account/SignIn" asp-page-handler="SignOut">
+                        <button class="sign-out" type="submit">Sign out</button>
+                    </form>
+                }
+                else
+                {
+                    <a class="button button-outline button-small" asp-page="/Account/SignIn">
+                        <partial name="_Icon" model='"lock"' />
+                        Sign in
+                    </a>
+                }
+            </div>
+        </div>
+    </header>
+    <main id="main">
+        @RenderBody()
+    </main>
+    <footer class="site-footer">
+        <div class="shell footer-inner">
+            <a class="brand" asp-page="/Index" aria-label="Colonial Heritage Genealogy Club home">
+                <partial name="_Logo" />
+            </a>
+            <span class="footer-place"><partial name="_Icon" model='"pin"' /> Williamsburg, Virginia</span>
+            <a class="footer-link" href="https://www.colonialheritageclub.com/">Colonial Heritage community</a>
+        </div>
+    </footer>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

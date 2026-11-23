@@ -1,0 +1,22 @@
+@page "/admin"
+@{
+    ViewData["Title"] = "Club administration";
+}
+<div class="admin-grid">
+    <a class="admin-card" asp-page="/Admin/Mission">
+        <span class="icon-tile"><partial name="_Icon" model='"book"' /></span>
+        <div><h2>Mission statement</h2><p>Edit the introduction on the homepage.</p></div>
+    </a>
+    <a class="admin-card" asp-page="/Admin/Meeting">
+        <span class="icon-tile"><partial name="_Icon" model='"calendar"' /></span>
+        <div><h2>Meetings</h2><p>Post and update meeting dates, times, and locations.</p></div>
+    </a>
+    <a class="admin-card" asp-page="/Admin/Material">
+        <span class="icon-tile"><partial name="_Icon" model='"slides"' /></span>
+        <div><h2>Resource library</h2><p>Post slides and videos and manage who can see them.</p></div>
+    </a>
+    <a class="admin-card" asp-page="/Admin/Members">
+        <span class="icon-tile"><partial name="_Icon" model='"account"' /></span>
+        <div><h2>Member accounts</h2><p>Set up accounts, reset passwords, or revoke access.</p></div>
+    </a>
+</div>
