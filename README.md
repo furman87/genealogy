@@ -1,4 +1,4 @@
-# Colonial Heritage Genealogy Club
+# Genealogy Club Website
 
 A website for Colonial Heritage neighbors in Williamsburg, Virginia. The home page introduces the club and shows upcoming meetings. The resource library holds meeting slides and videos. The administrator manages the site and creates member accounts as needed.
 
