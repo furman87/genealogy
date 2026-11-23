@@ -63,9 +63,9 @@ cd /opt/genealogy
 4. Copy the Nginx template into a new site configuration. Replace `genealogy.example.com` with your chosen hostname and change the proxy port if needed.
 
    ```bash
-   sudo cp deploy/nginx/colonial-heritage-genealogy.conf /etc/nginx/sites-available/colonial-heritage-genealogy
-   sudoedit /etc/nginx/sites-available/colonial-heritage-genealogy
-   sudo ln -s /etc/nginx/sites-available/colonial-heritage-genealogy /etc/nginx/sites-enabled/colonial-heritage-genealogy
+   sudo cp deploy/nginx/genealogy.conf /etc/nginx/sites-available/genealogy
+   sudoedit /etc/nginx/sites-available/genealogy
+   sudo ln -s /etc/nginx/sites-available/genealogy /etc/nginx/sites-enabled/genealogy
    sudo nginx -t
    sudo systemctl reload nginx
    ```
